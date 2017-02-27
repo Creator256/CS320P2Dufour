@@ -10,6 +10,8 @@ int generateSet(vector<int> &v, int t);
 void sortSet(vector<int> &v);
 void printSubSet(vector<int> v);
 void findSubSets(vector<int> s, vector<int> ss, int sS, int ssS, int cS, int cNC, int t);
+vector<vector<int>> subSets;
+
 int main(){
 	int total = 0;
 	cout << "Please enter a total sum to find: ";
@@ -44,7 +46,7 @@ void sortSet(vector<int> &v){
 }
 /*
 vector<vector<int>> calculateSubSets(vector<int> const &v, int total){
-    
+
     vector<vector<int>> subSets;
     int totalSubsets = 0;
     vector<int> workingVector = v;
@@ -88,7 +90,7 @@ vector<vector<int>> calculateSubSets(vector<int> const &v, int total){
 			}
 		}
     }
-    
+
     cout << "Total subSets that equal total: " << totalSubsets << endl;
     return subSets;
 }
@@ -107,6 +109,30 @@ void findSubSets(vector<int> set, vector<int> subSet, int setSize, int subSetSiz
 				subSet[subSetSize] = set[i];
 				if (curSum + set[i] <= total) {
 					findSubSets(set, subSet, setSize, subSetSize + 1, curSum + set[i], i + 1, total);
+				}
+			}
+		}
+	}
+}
+
+bool getSubSets(vector<int> set, vector<int> subSet, vector<int> markedElements, int runningTotal, int total){
+
+	if(runningTotal == total){
+		subSets.push_back(subSet);
+		int reductionVar = subSet.back();
+		subSet.pop_back();
+		getSubSets(set, subSet, markedElements, runningTotal-reductionVar, total);
+		return true;
+	}
+	else{
+		for(int i = 0; i < set.size(); i++){
+			if(find(markedElements.begin(), markedElements.end(), set[i]) != markedElements.end()){
+				if(runningTotal + set[i] <= total){
+					subSet.push_back(set[i]);
+					getSubSets(set, subSet, markedElements, runningTotal+set[i], total);
+				}
+				else{
+					markedElements.push_back(set[i]);
 				}
 			}
 		}
